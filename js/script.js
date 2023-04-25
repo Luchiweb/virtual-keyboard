@@ -1,10 +1,21 @@
+/* eslint-disable no-restricted-syntax */
 import keyboardList from './keyList.js'; // eslint-disable-line
-// eslint-disable-next-line
-const root = document.documentElement;
 const { body } = document;
-// eslint-disable-next-line
+
+function createInput() {
+  const newInput = document.createElement('textarea');
+  newInput.name = 'input';
+  newInput.id = 'input';
+  newInput.classList.add('input');
+  body.appendChild(newInput);
+}
+
+createInput();
+const input = document.getElementById('input');
+
 class Keyboard {
   constructor() {
+    this.keys = [];
     this.shiftLeft = null;
     this.shiftRight = null;
     this.capsLock = null;
@@ -18,45 +29,70 @@ class Keyboard {
     this.isCaseUp = false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   createKeyboard() {
     const keyboard = document.createElement('div');
     keyboard.classList.add('keyboard');
 
-    for (let i = 0; i < 5; i += 1) {
+    keyboardList.forEach((row) => {
       const keyboardRow = document.createElement('div');
+      const keys = this.createKeys(row);
       keyboardRow.classList.add('keyboard__row');
 
-      const arrayOfKeyButtons = this.createKeyButtons(keyboardList[i]);
-
-      for (let row = 0; row < arrayOfKeyButtons.length; row += 1) {
-        keyboardRow.appendChild(arrayOfKeyButtons[row]);
-      }
-
+      keyboardRow.append(...keys);
+      this.keys.push(...keys);
       keyboard.appendChild(keyboardRow);
-    }
+    });
 
     body.appendChild(keyboard);
-    this.initNavButtons();
+    this.initButtonListeners();
   }
 
   // eslint-disable-next-line class-methods-use-this
-  createKeyButtons(arrOfObj) {
-    return arrOfObj.map((obj) => {
-      const btn = document.createElement('div');
-      btn.classList.add('keyboard__button', `${obj.code}`, `${obj.type}`);
-      btn.innerHTML = `<span class="rus hidden">
-                      <span class="caseDown">${obj.ru}</span>
-                      <span class="caseUp hidden">${obj.ruShift}</span>
-                      <span class="caps hidden">${obj.ruCaps}</span>
-                    </span>
-                    <span class="eng">
-                      <span class="caseDown">${obj.en}</span>
-                      <span class="caseUp hidden">${obj.shift}</span>
-                      <span class="caps hidden">${obj.caps}</span>
-                    </span>`;
-      return btn;
+  createKeys(row) {
+    return row.map((key) => {
+      const button = document.createElement('div');
+      button.classList.add('keyboard__button', key.code, key.type);
+
+      button.innerHTML = `
+          <span class="rus hidden">
+            <span class="caseDown">${key.ru}</span>
+            <span class="caseUp hidden">${key.ruShift}</span>
+            <span class="caps hidden">${key.ruCaps}</span>
+          </span>
+          <span class="eng">
+            <span class="caseDown">${key.en}</span>
+            <span class="caseUp hidden">${key.shift}</span>
+            <span class="caps hidden">${key.caps}</span>
+          </span>
+        `;
+
+      return button;
     });
+  }
+
+  onKeyDown(button) {
+    let symbol = this.getSymbol(button);
+
+    if (button.classList.contains('nav-button')) {
+      symbol = this.onKeyDownNavButton(button.classList);
+    }
+
+    const { selectionStart, selectionEnd } = input;
+    const cursorPos = selectionStart;
+    const textBeforeCursor = input.value.substring(0, cursorPos);
+    const textAfterCursor = input.value.substring(cursorPos);
+
+    if (button === this.backspace) {
+      if (selectionStart === selectionEnd && selectionStart > 0) {
+        input.setRangeText('', selectionStart - 1, selectionEnd, 'end');
+      } else {
+        input.setRangeText('', selectionStart, selectionEnd, 'end');
+      }
+    } else {
+      input.value = `${textBeforeCursor}${symbol}${textAfterCursor}`;
+      input.selectionStart = cursorPos + 1;
+      input.selectionEnd = cursorPos + 1;
+    }
   }
 
   initNavButtons() {
@@ -68,6 +104,36 @@ class Keyboard {
     this.backspace = document.querySelector('.Backspace');
     this.metaRight = document.querySelector('.MetaRight');
     this.metaLeft = document.querySelector('.MetaLeft');
+  }
+
+  getSymbol(button) {
+    const lang = this.isEng ? 'eng' : 'rus';
+    const letterCase = this.isCaseUp ? 'caseUp' : 'caseDown';
+    return button.querySelector(`.${lang} .${letterCase}`).textContent;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  onKeyDownNavButton(classList) {
+    if (classList.contains('Tab')) {
+      return '\t';
+    }
+    if (classList.contains('Enter')) {
+      return '\n';
+    }
+    if (classList.contains('Space')) {
+      return ' ';
+    }
+    return '';
+  }
+
+  initButtonListeners() {
+    for (let i = 0; i < this.keys.length; i += 1) {
+      this.keys[i].addEventListener('click', (e) => {
+        const button = e.currentTarget;
+        this.onKeyDown(button);
+      });
+    }
+    this.initNavButtons();
   }
 }
 

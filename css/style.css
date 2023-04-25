@@ -210,3 +210,13 @@ body {
 .Enter:active {
   background-color: var(--keyboard-color);
 }
+
+.input {
+  width: 550px;
+  height: 65px;
+  background: var(--standard-color);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 30px;
+  font-family: inherit;
+}
