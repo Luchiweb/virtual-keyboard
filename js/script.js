@@ -25,6 +25,7 @@ class Keyboard {
     this.backspace = null;
     this.metaRight = null;
     this.metaLeft = null;
+    this.lastButton = null;
     this.isEng = true;
     this.isCaseUp = false;
   }
@@ -134,6 +135,31 @@ class Keyboard {
       });
     }
     this.initNavButtons();
+    this.initKeyboardListeners();
+  }
+
+  initKeyboardListeners() {
+    document.addEventListener('keydown', (e) => {
+      e.preventDefault();
+      const currentButton = document.querySelector(`.${e.code}`);
+      currentButton.classList.add('active');
+      this.lastButton = currentButton;
+      this.onKeyDown(currentButton);
+    });
+
+    document.addEventListener('keyup', (e) => {
+      const currentButton = document.querySelector(`.${e.code}`);
+      currentButton.classList.remove('active');
+
+      if (this.lastButton) {
+        this.keys.forEach((button) => {
+          if (button.classList.contains('active') && button !== this.capsLock) {
+            button.classList.remove('active');
+          }
+        });
+      }
+      this.lastButton = null;
+    });
   }
 }
 
