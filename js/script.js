@@ -53,7 +53,7 @@ class Keyboard {
 
     body.appendChild(keyboard);
     this.initButtonListeners();
-    Keyboard.createThemeButtons();
+    this.createThemeButtons();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -79,7 +79,7 @@ class Keyboard {
     });
   }
 
-  static createThemeButtons() {
+  createThemeButtons() {
     const buttonWrapper = document.createElement('div');
     buttonWrapper.classList.add('theme-buttons');
     buttonWrapper.innerHTML = `<button id="main-theme" class="theme-button main-theme-button"></button>
@@ -87,16 +87,16 @@ class Keyboard {
                              <button id="third-theme" class="theme-button third-theme-button"></button>`;
 
     body.appendChild(buttonWrapper);
-    Keyboard.initThemeListeners();
+    this.initThemeListeners();
   }
 
-  static initThemeListeners() {
+  initThemeListeners() {
     const themeButtons = document.querySelectorAll('.theme-button');
     for (let i = 0; i < themeButtons.length; i += 1) {
-      themeButtons[i].addEventListener('click', () => Keyboard.setTheme(i));
+      themeButtons[i].addEventListener('click', () => this.setTheme(i));
     }
     const lastTheme = localStorage.getItem('theme');
-    Keyboard.setTheme(lastTheme);
+    this.setTheme(lastTheme);
   }
 
   onKeyDown(button) {
@@ -106,7 +106,7 @@ class Keyboard {
     let symbol = this.getSymbol(button);
 
     if (button.classList.contains('nav-button')) {
-      symbol = Keyboard.onKeyDownNavButton(button.classList);
+      symbol = this.onKeyDownNavButton(button.classList);
     }
 
     const { selectionStart, selectionEnd } = input;
@@ -152,7 +152,8 @@ class Keyboard {
     return button.querySelector(`.${lang} .${letterCase}`).textContent;
   }
 
-  static onKeyDownNavButton(classList) {
+  // eslint-disable-next-line class-methods-use-this
+  onKeyDownNavButton(classList) {
     if (classList.contains('Tab')) {
       return '\t';
     }
@@ -241,7 +242,8 @@ class Keyboard {
     return false;
   }
 
-  static setTheme(num) {
+  // eslint-disable-next-line class-methods-use-this
+  setTheme(num) {
     const themeObj = themes[num];
     for (let i = 0; i < Object.keys(themeObj).length; i += 1) {
       const property = Object.keys(themeObj)[i];
