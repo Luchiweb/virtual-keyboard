@@ -153,7 +153,9 @@ body {
 
 .nav-button:hover,
 .Enter:hover.Enter::before,
-.Enter:hover.Enter::after {
+.Enter:hover.Enter::after, 
+.Enter.active.Enter::before, 
+.Enter.active.Enter::after {
   background-color: var(--nav-hover-color);
 }
 
@@ -179,6 +181,7 @@ body {
   transform: translateY(2px);
   border-width: 1px;
 }
+
 .standard-button:active,
 .standard-button.active {
   background-color: var(--standard-hover-color);
@@ -201,13 +204,15 @@ body {
   background-color: var(--standard-hover-color);
 }
 
-.Enter:active.Enter::before {
+.Enter:active.Enter::before,
+.Enter.active.Enter::before {
   border: 2px solid var(--keyboard-color);
   border: none;
   box-shadow: none;
 }
 
-.Enter:active {
+.Enter:active, 
+.Enter.active {
   background-color: var(--keyboard-color);
 }
 

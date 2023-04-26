@@ -74,6 +74,9 @@ class Keyboard {
   }
 
   onKeyDown(button) {
+    if (this.setLanguage()) return;
+    this.checkCase();
+
     let symbol = this.getSymbol(button);
 
     if (button.classList.contains('nav-button')) {
@@ -111,7 +114,12 @@ class Keyboard {
 
   getSymbol(button) {
     const lang = this.isEng ? 'eng' : 'rus';
-    const letterCase = this.isCaseUp ? 'caseUp' : 'caseDown';
+
+    let letterCase;
+    if (this.capsLockActive) letterCase = 'caps';
+    else if (this.isCaseUp) letterCase = 'caseUp';
+    else letterCase = 'caseDown';
+
     return button.querySelector(`.${lang} .${letterCase}`).textContent;
   }
 
@@ -174,7 +182,11 @@ class Keyboard {
 
       if (this.lastButton) {
         this.keys.forEach((button) => {
-          if (button.classList.contains('active') && button !== this.capsLock) {
+          const notCaseButton = button !== this.capsLock
+                             && button !== this.shiftLeft
+                             && button !== this.shiftRight;
+
+          if (button.classList.contains('active') && notCaseButton) {
             button.classList.remove('active');
           }
         });
@@ -182,6 +194,23 @@ class Keyboard {
       this.lastButton = null;
       this.setCase(currentButton);
     });
+  }
+
+  setLanguage() {
+    if (
+      this.altLeft.classList.contains('active')
+      && this.space.classList.contains('active')
+    ) {
+      const eng = document.querySelectorAll('.eng');
+      const ru = document.querySelectorAll('.rus');
+
+      ru.forEach((item) => item.classList.toggle('hidden'));
+      eng.forEach((item) => item.classList.toggle('hidden'));
+
+      this.isEng = ru[0].classList.contains('hidden');
+      return true;
+    }
+    return false;
   }
 
   setCase(currentButton) {
