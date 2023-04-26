@@ -1,9 +1,14 @@
 /* eslint-disable no-restricted-syntax */
 import keyboardList from './keyList.js'; // eslint-disable-line
+import themes from './themeList.js'; // eslint-disable-line
+
 const { body } = document;
+const root = document.documentElement;
 
 function createInput() {
   const newInput = document.createElement('textarea');
+
+  newInput.value = localStorage.getItem('text');
   newInput.name = 'input';
   newInput.id = 'input';
   newInput.classList.add('input');
@@ -48,6 +53,7 @@ class Keyboard {
 
     body.appendChild(keyboard);
     this.initButtonListeners();
+    this.createThemeButtons();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -71,6 +77,26 @@ class Keyboard {
 
       return button;
     });
+  }
+
+  createThemeButtons() {
+    const buttonWrapper = document.createElement('div');
+    buttonWrapper.classList.add('theme-buttons');
+    buttonWrapper.innerHTML = `<button id="main-theme" class="theme-button main-theme-button"></button>
+                             <button id="second-theme" class="theme-button second-theme-button"></button>
+                             <button id="third-theme" class="theme-button third-theme-button"></button>`;
+
+    body.appendChild(buttonWrapper);
+    this.initThemeListeners();
+  }
+
+  initThemeListeners() {
+    const themeButtons = document.querySelectorAll('.theme-button');
+    for (let i = 0; i < themeButtons.length; i += 1) {
+      themeButtons[i].addEventListener('click', () => this.setTheme(i));
+    }
+    const lastTheme = localStorage.getItem('theme');
+    this.setTheme(lastTheme);
   }
 
   onKeyDown(button) {
@@ -99,6 +125,7 @@ class Keyboard {
       input.selectionStart = cursorPos + 1;
       input.selectionEnd = cursorPos + 1;
     }
+    localStorage.setItem('text', input.value);
   }
 
   initNavButtons() {
@@ -211,6 +238,16 @@ class Keyboard {
       return true;
     }
     return false;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  setTheme(num) {
+    const themeObj = themes[num];
+    for (let i = 0; i < Object.keys(themeObj).length; i += 1) {
+      const property = Object.keys(themeObj)[i];
+      root.style.setProperty(property, themeObj[property]);
+    }
+    localStorage.setItem('theme', num);
   }
 
   setCase(currentButton) {

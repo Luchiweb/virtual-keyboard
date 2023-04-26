@@ -7,11 +7,11 @@
   --standard-color: #f6d5d5;
   --standard-shadow-color: #9b7474;
   --standard-hover-color: #dfafaf;
-  --standard-text-color: #5a1a5a;
+  --standard-text-color: #8d6565;
   --nav-color: #ca498c;
   --nav-shadow-color: #9a3d6d;
   --nav-hover-color: #ac4d7e;
-  --nav-text-color: #e097bd;
+  --nav-text-color: #f7d5d5;
   --uniq-color: #8b2f8a;
   --uniq-shadow-color: #5b2d5b;
   --uniq-hover-color: #5a1a5a;
@@ -76,6 +76,7 @@ body {
 .nav-button {
   background: var(--nav-color);
   border: 2px solid var(--nav-shadow-color);
+  color: var(--nav-text-color);
   transition: var(--main-transition);
   box-shadow: var(--main-shadow-offset) var(--nav-shadow-color);
 }
@@ -144,6 +145,7 @@ body {
   width: 265px;
   background-color: var(--standard-color);
   border-color: var(--standard-shadow-color);
+  color: var(--standard-text-color);
   box-shadow: var(--main-shadow-offset) var(--standard-shadow-color);
 }
 
@@ -224,4 +226,24 @@ body {
   padding: 10px;
   margin-bottom: 30px;
   font-family: inherit;
+}
+
+.theme-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.theme-button {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+.main-theme-button {
+  background-color: #b08fbb;
+}
+.second-theme-button {
+  background-color: #ffd3b6;
+}
+.third-theme-button {
+  background-color: #eaeaea;
 }
