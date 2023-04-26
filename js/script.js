@@ -35,6 +35,7 @@ class Keyboard {
     this.capsLockActive = false;
     this.isEng = true;
     this.isCaseUp = false;
+    this.lastLanguage = 'eng';
   }
 
   createKeyboard() {
@@ -54,6 +55,8 @@ class Keyboard {
     body.appendChild(keyboard);
     this.initButtonListeners();
     this.createThemeButtons();
+
+    if (localStorage.getItem('language') === 'ru') this.setLanguage(true);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -225,10 +228,10 @@ class Keyboard {
     });
   }
 
-  setLanguage() {
+  setLanguage(isReload = false) {
     if (
-      this.altLeft.classList.contains('active')
-      && this.space.classList.contains('active')
+      (this.altLeft.classList.contains('active')
+      && this.space.classList.contains('active')) || isReload
     ) {
       const eng = document.querySelectorAll('.eng');
       const ru = document.querySelectorAll('.rus');
@@ -237,6 +240,9 @@ class Keyboard {
       eng.forEach((item) => item.classList.toggle('hidden'));
 
       this.isEng = ru[0].classList.contains('hidden');
+      this.lastLanguage = this.isEng ? 'eng' : 'ru';
+
+      localStorage.setItem('language', this.lastLanguage);
       return true;
     }
     return false;
