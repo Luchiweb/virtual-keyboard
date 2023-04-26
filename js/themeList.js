@@ -9,7 +9,7 @@ const themes = [
     '--nav-color': '#ca498c',
     '--nav-shadow-color': '#9a3d6d',
     '--nav-hover-color': '#ac4d7e',
-    '--nav-text-color': '#f7d5d5',
+    '--nav-text-color': '#6c2d4e',
     '--uniq-color': '#8b2f8a',
     '--uniq-shadow-color': '#5b2d5b',
     '--uniq-hover-color': '#5a1a5a',

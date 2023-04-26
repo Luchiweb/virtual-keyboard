@@ -53,7 +53,7 @@ class Keyboard {
 
     body.appendChild(keyboard);
     this.initButtonListeners();
-    this.createThemeButtons();
+    Keyboard.createThemeButtons();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -79,7 +79,7 @@ class Keyboard {
     });
   }
 
-  createThemeButtons() {
+  static createThemeButtons() {
     const buttonWrapper = document.createElement('div');
     buttonWrapper.classList.add('theme-buttons');
     buttonWrapper.innerHTML = `<button id="main-theme" class="theme-button main-theme-button"></button>
@@ -87,16 +87,16 @@ class Keyboard {
                              <button id="third-theme" class="theme-button third-theme-button"></button>`;
 
     body.appendChild(buttonWrapper);
-    this.initThemeListeners();
+    Keyboard.initThemeListeners();
   }
 
-  initThemeListeners() {
+  static initThemeListeners() {
     const themeButtons = document.querySelectorAll('.theme-button');
     for (let i = 0; i < themeButtons.length; i += 1) {
-      themeButtons[i].addEventListener('click', () => this.setTheme(i));
+      themeButtons[i].addEventListener('click', () => Keyboard.setTheme(i));
     }
     const lastTheme = localStorage.getItem('theme');
-    this.setTheme(lastTheme);
+    Keyboard.setTheme(lastTheme);
   }
 
   onKeyDown(button) {
@@ -106,7 +106,7 @@ class Keyboard {
     let symbol = this.getSymbol(button);
 
     if (button.classList.contains('nav-button')) {
-      symbol = this.onKeyDownNavButton(button.classList);
+      symbol = Keyboard.onKeyDownNavButton(button.classList);
     }
 
     const { selectionStart, selectionEnd } = input;
@@ -120,11 +120,13 @@ class Keyboard {
       } else {
         input.setRangeText('', selectionStart, selectionEnd, 'end');
       }
-    } else {
+    } else if (symbol !== '') {
       input.value = `${textBeforeCursor}${symbol}${textAfterCursor}`;
       input.selectionStart = cursorPos + 1;
       input.selectionEnd = cursorPos + 1;
     }
+
+    this.removeAll(textAfterCursor);
     localStorage.setItem('text', input.value);
   }
 
@@ -143,15 +145,14 @@ class Keyboard {
     const lang = this.isEng ? 'eng' : 'rus';
 
     let letterCase;
-    if (this.capsLockActive) letterCase = 'caps';
-    else if (this.isCaseUp) letterCase = 'caseUp';
+    if (this.capsLockActive && !this.shiftActive) letterCase = 'caps';
+    else if (this.isCaseUp || (this.capsLockActive && this.shiftActive)) letterCase = 'caseUp';
     else letterCase = 'caseDown';
 
     return button.querySelector(`.${lang} .${letterCase}`).textContent;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  onKeyDownNavButton(classList) {
+  static onKeyDownNavButton(classList) {
     if (classList.contains('Tab')) {
       return '\t';
     }
@@ -240,8 +241,7 @@ class Keyboard {
     return false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  setTheme(num) {
+  static setTheme(num) {
     const themeObj = themes[num];
     for (let i = 0; i < Object.keys(themeObj).length; i += 1) {
       const property = Object.keys(themeObj)[i];
@@ -274,8 +274,31 @@ class Keyboard {
     this.capsLockActive = this.capsLock.classList.contains('active');
     this.isCaseUp = this.shiftActive || this.capsLockActive;
   }
+
+  removeAll(textAfterCursor) {
+    if (
+      (this.metaLeft.classList.contains('active')
+      || this.metaRight.classList.contains('active'))
+      && this.backspace.classList.contains('active')
+    ) {
+      input.value = `${textAfterCursor}`;
+      input.selectionStart = 0;
+      input.selectionEnd = 0;
+    }
+  }
+}
+
+function createDescription() {
+  const description = document.createElement('div');
+  description.classList.add('description');
+
+  description.innerHTML = `<p>Keyboard created in <b>MacOs</b> operating system</p>
+                           <p>Combination for switching the language: left option/alt(⌥) + space</p>`;
+
+  body.appendChild(description);
 }
 
 const keyboard = new Keyboard();
 
 keyboard.createKeyboard();
+createDescription();

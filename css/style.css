@@ -1,5 +1,5 @@
-@import "./reset.css";
-@import url("https://fonts.googleapis.com/css?family=Montserrat:600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic&display=swap");
+@import "./reset.css"; 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
 :root {
   --keyboard-color: #b08fbb;
@@ -11,7 +11,7 @@
   --nav-color: #ca498c;
   --nav-shadow-color: #9a3d6d;
   --nav-hover-color: #ac4d7e;
-  --nav-text-color: #f7d5d5;
+  --nav-text-color: #6c2d4e;
   --uniq-color: #8b2f8a;
   --uniq-shadow-color: #5b2d5b;
   --uniq-hover-color: #5a1a5a;
@@ -25,9 +25,11 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 30px;
   background: #343033;
   color: var(--standard-text-color);
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
 }
 
 .hidden {
@@ -46,7 +48,6 @@ body {
   border-width: 2px 2px 6px 3px;
   border-radius: 20px;
   padding: 10px;
-  margin-bottom: 30px;
 }
 
 .keyboard__row {
@@ -224,8 +225,8 @@ body {
   background: var(--standard-color);
   border-radius: 10px;
   padding: 10px;
-  margin-bottom: 30px;
   font-family: inherit;
+  font-weight: 500;
 }
 
 .theme-buttons {
@@ -246,4 +247,11 @@ body {
 }
 .third-theme-button {
   background-color: #eaeaea;
+}
+
+.description {
+  text-align: center;
+  color: #ead6d6;
+  font-weight: 500;
+  line-height: 200%;
 }
