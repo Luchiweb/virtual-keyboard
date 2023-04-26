@@ -1,0 +1,257 @@
+@import "./reset.css"; 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+:root {
+  --keyboard-color: #b08fbb;
+  --keyboard-shadow-color: #825d8e;
+  --standard-color: #f6d5d5;
+  --standard-shadow-color: #9b7474;
+  --standard-hover-color: #dfafaf;
+  --standard-text-color: #8d6565;
+  --nav-color: #ca498c;
+  --nav-shadow-color: #9a3d6d;
+  --nav-hover-color: #ac4d7e;
+  --nav-text-color: #6c2d4e;
+  --uniq-color: #8b2f8a;
+  --uniq-shadow-color: #5b2d5b;
+  --uniq-hover-color: #5a1a5a;
+  --uniq-text-color: #e1d6e1;
+  --main-transition: all 0.2s ease;
+  --main-shadow-offset: 0px 2px 0px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  background: #343033;
+  color: var(--standard-text-color);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+.hidden {
+  display: none;
+}
+
+.keyboard {
+  width: 675px;
+  height: 230px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background-color: var(--keyboard-color);
+  border: solid var(--keyboard-shadow-color);
+  border-width: 2px 2px 6px 3px;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.keyboard__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.keyboard__button {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: var(--main-transition);
+}
+
+.standard-button {
+  background: var(--standard-color);
+  border: 2px solid var(--standard-shadow-color);
+  box-shadow: var(--main-shadow-offset) var(--standard-shadow-color);
+}
+
+.nav-button {
+  background: var(--nav-color);
+  border: 2px solid var(--nav-shadow-color);
+  color: var(--nav-text-color);
+  transition: var(--main-transition);
+  box-shadow: var(--main-shadow-offset) var(--nav-shadow-color);
+}
+
+.uniq-button {
+  align-self: flex-end;
+  color: var(--uniq-text-color);
+  background: var(--uniq-color);
+  border: 2px solid var(--uniq-shadow-color);
+  margin-left: auto;
+  transition: var(--main-transition);
+  box-shadow: var(--main-shadow-offset) var(--uniq-shadow-color);
+}
+
+.Backspace,
+.CapsLock {
+  width: 75px;
+}
+.AltLeft,
+.AltRight {
+  width: 50px;
+}
+.ShiftLeft {
+  width: 55px;
+}
+.ShiftRight {
+  width: 60px;
+}
+.Tab {
+  width: 65px;
+}
+
+.Enter {
+  width: 45px;
+  position: relative;
+  background-color: var(--nav-shadow-color);
+  border: none;
+}
+.Enter::before {
+  content: "";
+  top: 1px;
+  right: 0;
+  width: 35px;
+  height: 75px;
+  position: absolute;
+  background-color: var(--nav-color);
+  border: 2px solid var(--nav-shadow-color);
+  border-radius: 20px;
+  transition: border 0.2s ease;
+  box-shadow: var(--main-shadow-offset) var(--nav-shadow-color);
+}
+.Enter::after {
+  content: "↩";
+  right: 2px;
+  width: 41px;
+  height: 33px;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--nav-color);
+  border-radius: 20px;
+}
+
+.Space {
+  width: 265px;
+  background-color: var(--standard-color);
+  border-color: var(--standard-shadow-color);
+  color: var(--standard-text-color);
+  box-shadow: var(--main-shadow-offset) var(--standard-shadow-color);
+}
+
+.uniq-button:hover {
+  background-color: var(--uniq-hover-color);
+}
+
+.nav-button:hover,
+.Enter:hover.Enter::before,
+.Enter:hover.Enter::after, 
+.Enter.active.Enter::before, 
+.Enter.active.Enter::after {
+  background-color: var(--nav-hover-color);
+}
+
+.Enter:hover {
+  background-color: var(--nav-shadow-color);
+}
+
+.Space:hover {
+  background-color: var(--standard-hover-color);
+}
+.standard-button:hover {
+  background-color: var(--standard-hover-color);
+}
+
+.standard-button:active,
+.uniq-button:active,
+.nav-button:active,
+.standard-button.active,
+.uniq-button.active,
+.nav-button.active {
+  border-color: var(--keyboard-color);
+  box-shadow: none;
+  transform: translateY(2px);
+  border-width: 1px;
+}
+
+.standard-button:active,
+.standard-button.active {
+  background-color: var(--standard-hover-color);
+  border-width: 3px;
+}
+
+.nav-button:active,
+.nav-button.active {
+  background-color: var(--nav-hover-color);
+}
+
+.uniq-button:active,
+.uniq-button.active {
+  background-color: var(--uniq-hover-color);
+}
+
+.Space:active,
+.Space.active {
+  border-width: 2px 2px 3px 3px;
+  background-color: var(--standard-hover-color);
+}
+
+.Enter:active.Enter::before,
+.Enter.active.Enter::before {
+  border: 2px solid var(--keyboard-color);
+  border: none;
+  box-shadow: none;
+}
+
+.Enter:active, 
+.Enter.active {
+  background-color: var(--keyboard-color);
+}
+
+.input {
+  width: 550px;
+  height: 65px;
+  background: var(--standard-color);
+  border-radius: 10px;
+  padding: 10px;
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.theme-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.theme-button {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+.main-theme-button {
+  background-color: #b08fbb;
+}
+.second-theme-button {
+  background-color: #ffd3b6;
+}
+.third-theme-button {
+  background-color: #eaeaea;
+}
+
+.description {
+  text-align: center;
+  color: #ead6d6;
+  font-weight: 500;
+  line-height: 200%;
+}
