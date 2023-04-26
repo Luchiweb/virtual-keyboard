@@ -1,6 +1,5 @@
-/* eslint-disable no-restricted-syntax */
-import keyboardList from './keyList.js'; // eslint-disable-line
-import themes from './themeList.js'; // eslint-disable-line
+import keyboardList from './keyList.js';
+import themes from './themeList.js';
 
 const { body } = document;
 const root = document.documentElement;
@@ -59,7 +58,6 @@ class Keyboard {
     if (localStorage.getItem('language') === 'ru') this.setLanguage(true);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   createKeys(row) {
     return row.map((key) => {
       const button = document.createElement('div');
@@ -155,7 +153,6 @@ class Keyboard {
     return button.querySelector(`.${lang} .${letterCase}`).textContent;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   onKeyDownNavButton(classList) {
     if (classList.contains('Tab')) {
       return '\t';
@@ -248,7 +245,6 @@ class Keyboard {
     return false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   setTheme(num) {
     const themeObj = themes[num];
     for (let i = 0; i < Object.keys(themeObj).length; i += 1) {
