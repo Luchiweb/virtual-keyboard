@@ -26,6 +26,8 @@ class Keyboard {
     this.metaRight = null;
     this.metaLeft = null;
     this.lastButton = null;
+    this.shiftActive = false;
+    this.capsLockActive = false;
     this.isEng = true;
     this.isCaseUp = false;
   }
@@ -136,6 +138,24 @@ class Keyboard {
     }
     this.initNavButtons();
     this.initKeyboardListeners();
+    this.initNavListeners();
+  }
+
+  initNavListeners() {
+    [this.shiftRight, this.shiftLeft].forEach((button) => {
+      button.addEventListener('mousedown', (e) => {
+        e.currentTarget.classList.toggle('active');
+        this.setCase(e.currentTarget);
+      });
+      button.addEventListener('mouseup', (e) => {
+        e.currentTarget.classList.remove('active');
+        this.setCase(e.currentTarget);
+      });
+    });
+    this.capsLock.addEventListener('click', (e) => {
+      e.currentTarget.classList.toggle('active');
+      this.setCase(e.currentTarget);
+    });
   }
 
   initKeyboardListeners() {
@@ -145,6 +165,7 @@ class Keyboard {
       currentButton.classList.add('active');
       this.lastButton = currentButton;
       this.onKeyDown(currentButton);
+      this.setCase(currentButton);
     });
 
     document.addEventListener('keyup', (e) => {
@@ -159,7 +180,33 @@ class Keyboard {
         });
       }
       this.lastButton = null;
+      this.setCase(currentButton);
     });
+  }
+
+  setCase(currentButton) {
+    if (
+      currentButton === this.shiftLeft
+        || currentButton === this.shiftRight
+        || currentButton === this.capsLock
+    ) {
+      const caps = document.querySelectorAll('.caps');
+      const caseUp = document.querySelectorAll('.caseUp');
+      const caseDown = document.querySelectorAll('.caseDown');
+
+      this.checkCase();
+
+      caps.forEach((item) => ((this.capsLockActive && this.shiftActive) || !this.capsLockActive ? item.classList.add('hidden') : item.classList.remove('hidden')));
+      caseUp.forEach((item) => (this.shiftActive ? item.classList.remove('hidden') : item.classList.add('hidden')));
+      caseDown.forEach((item) => ((!this.shiftActive && this.capsLockActive) || this.shiftActive ? item.classList.add('hidden') : item.classList.remove('hidden')));
+    }
+  }
+
+  checkCase() {
+    this.shiftActive = this.shiftLeft.classList.contains('active')
+                     || this.shiftRight.classList.contains('active');
+    this.capsLockActive = this.capsLock.classList.contains('active');
+    this.isCaseUp = this.shiftActive || this.capsLockActive;
   }
 }
 
