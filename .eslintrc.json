@@ -11,5 +11,18 @@
         "sourceType": "module"
     },
     "rules": {
+        "import/extensions": [
+            "error", 
+            "always", 
+            {"ignorePackages": true} 
+        ],
+        "class-methods-use-this": [
+            "error", 
+            { 
+                "exceptMethods": ["createKeys", 
+                                  "onKeyDownNavButton",
+                                  "setTheme"] 
+            }
+        ] 
     }
 }
