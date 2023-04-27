@@ -97,7 +97,7 @@ class Keyboard {
       themeButtons[i].addEventListener('click', () => this.setTheme(i));
     }
     const lastTheme = localStorage.getItem('theme');
-    this.setTheme(lastTheme);
+    if (lastTheme) this.setTheme(lastTheme);
   }
 
   onKeyDown(button) {
