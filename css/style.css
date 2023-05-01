@@ -255,3 +255,15 @@ body {
   font-weight: 500;
   line-height: 200%;
 }
+.copy-button{
+  color: var(--standard-text-color);
+  background: var(--standard-color);
+  padding: 5px 20px;
+  border-radius: 20px;
+  transition: var(--main-transition);
+}
+.copy-button:disabled{
+  color: var(--standard-color);
+  background: var(--standard-text-color);
+  cursor: no-drop;
+}

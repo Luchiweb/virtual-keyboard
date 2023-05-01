@@ -7,7 +7,7 @@ const root = document.documentElement;
 function createInput() {
   const newInput = document.createElement('textarea');
 
-  newInput.value = localStorage.getItem('text');
+  newInput.value = localStorage.getItem('text') || 'HI! Let\'s try)';
   newInput.name = 'input';
   newInput.id = 'input';
   newInput.classList.add('input');
@@ -30,6 +30,7 @@ class Keyboard {
     this.metaRight = null;
     this.metaLeft = null;
     this.lastButton = null;
+    this.fn = null;
     this.shiftActive = false;
     this.capsLockActive = false;
     this.isEng = true;
@@ -55,7 +56,7 @@ class Keyboard {
     this.initButtonListeners();
     this.createThemeButtons();
 
-    if (localStorage.getItem('language') === 'ru') this.setLanguage(true);
+    if (localStorage.getItem('language') === 'ru') this.setLanguage(null, true);
   }
 
   createKeys(row) {
@@ -101,7 +102,7 @@ class Keyboard {
   }
 
   onKeyDown(button) {
-    if (this.setLanguage()) return;
+    if (this.setLanguage(button)) return;
     this.checkCase();
 
     let symbol = this.getSymbol(button);
@@ -112,6 +113,7 @@ class Keyboard {
 
     const { selectionStart, selectionEnd } = input;
     const cursorPos = selectionStart;
+
     const textBeforeCursor = input.value.substring(0, cursorPos);
     const textAfterCursor = input.value.substring(cursorPos);
 
@@ -123,10 +125,9 @@ class Keyboard {
       }
     } else if (symbol !== '') {
       input.value = `${textBeforeCursor}${symbol}${textAfterCursor}`;
-      input.selectionStart = cursorPos + 1;
-      input.selectionEnd = cursorPos + 1;
+      input.setSelectionRange(cursorPos + 1, cursorPos + 1);
     }
-
+    input.focus();
     this.removeAll(textAfterCursor);
     localStorage.setItem('text', input.value);
   }
@@ -140,6 +141,7 @@ class Keyboard {
     this.backspace = document.querySelector('.Backspace');
     this.metaRight = document.querySelector('.MetaRight');
     this.metaLeft = document.querySelector('.MetaLeft');
+    this.fn = document.querySelector('.Fn');
   }
 
   getSymbol(button) {
@@ -225,11 +227,8 @@ class Keyboard {
     });
   }
 
-  setLanguage(isReload = false) {
-    if (
-      (this.altLeft.classList.contains('active')
-      && this.space.classList.contains('active')) || isReload
-    ) {
+  setLanguage(button, isReload = false) {
+    if (button === this.fn || isReload) {
       const eng = document.querySelectorAll('.eng');
       const ru = document.querySelectorAll('.rus');
 
@@ -297,12 +296,30 @@ function createDescription() {
   description.classList.add('description');
 
   description.innerHTML = `<p>Keyboard created in <b>MacOs</b> operating system</p>
-                           <p>Combination for switching the language: left option/alt(⌥) + space</p>`;
+                           <p>For switching the language use: <b>fn</b></p>`;
 
   body.appendChild(description);
+}
+function createCopyButton() {
+  const copyButton = document.createElement('button');
+  copyButton.classList.add('copy-button');
+
+  copyButton.innerText = 'Copy to clipboard!';
+
+  body.appendChild(copyButton);
+  copyButton.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(input.value);
+    copyButton.innerText = 'Text copied successfully';
+    copyButton.disabled = true;
+    setTimeout(() => {
+      copyButton.innerText = 'Copy to clipboard!';
+      copyButton.disabled = false;
+    }, 2500);
+  });
 }
 
 const keyboard = new Keyboard();
 
 keyboard.createKeyboard();
 createDescription();
+createCopyButton();
