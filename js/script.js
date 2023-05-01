@@ -295,7 +295,8 @@ function createDescription() {
   const description = document.createElement('div');
   description.classList.add('description');
 
-  description.innerHTML = `<p>Keyboard created in <b>MacOs</b> operating system</p>
+  description.innerHTML = `<p>Keyboard created in <b>MacOs</b> operating system. 
+                           <b><a href="https://www.youtube.com/watch?v=HdyHU6Edfe4" target="_blank">Preview link</a></b></p>
                            <p>For switching the language use: <b>fn</b></p>`;
 
   body.appendChild(description);
