@@ -1,0 +1,28 @@
+{
+    "env": {
+        "browser": true,
+        "es2022": true
+    },
+    "extends": "airbnb-base",
+    "overrides": [
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "rules": {
+        "import/extensions": [
+            "error", 
+            "always", 
+            {"ignorePackages": true} 
+        ],
+        "class-methods-use-this": [
+            "error", 
+            { 
+                "exceptMethods": ["createKeys", 
+                                  "onKeyDownNavButton",
+                                  "setTheme"] 
+            }
+        ] 
+    }
+}
